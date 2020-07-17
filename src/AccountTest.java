@@ -1,33 +1,33 @@
+// JUnitを使う際は、基本的には以下の2行をimoportしておけば問題ない
+import static org.junit.Assert.*;
+
+import org.junit.Test;
 
 public class AccountTest {
-	// 本番クラスにmainメソッドを定義することもできるが、もし本番クラスで定義して
-	// 本番では使用しないはずのメソッドを利用者が誤って起動してしまうなど、本番稼働の不具合や
-	// セキュリティホールにつながる可能性は0ではない
-	// そのため本番稼働に不要なものは、本番稼働用のクラスの中に含めるべきではない
-	public static void main(String[] args) {
-		testInstantiate();
-		testTransfer();
-	}
-
-	// じっさいにAccountをnewして使ってみるテスト
-	private static void testInstantiate() {
-		System.out.println("インスタンス化のテストを行います");
+	// JUnitを使ったテストケース
+	// JUnitのJARファイルの中にmainメソッドに相当するプログラム(JUnitCore)が準備されているため、mainメソッドは記述しなくてよい
+	// JUnitでは1つのテストクラスの中に、必ず複数のメソッドに分けてテストを記述していく
+	// 1つのテストメソッドには、1つのことを確認するようなテストを作ると良い
+	// テストメソッドには、@Testというアノテーションをつける、これを忘れるとテストメソッドであると認識されない
+	@Test public void instantiate() {
 		Account a = new Account("ミナト", 30000);
-		if(!"ミナト".equals(a.owner)) {
-			System.out.println("エラー:名義人の値に問題があります");
-		} else if(30000 != a.balance) {
-			System.out.println("エラー:残高の値に問題があります");
-		}
-		System.out.println("問題はは検出されませんでした");
+		// 値の確認にはif文ではなく、JUnitに用意されたメソッドを利用する
+		// assertEqualsメソッドは、assertEquals(期待値, 実際値)のように記述して、実際値が期待値と等価かを評価する
+		assertEquals("ミナト", a.owner);
+		assertEquals(30000, a.balance);
+		// 他にも
+		// assertSameメソッドは、assertSame(期待値, 実際値)のように記述して、実際値が期待値と等値かを評価する
+		// assertNullメソッドは、assertNull(実際値)のように記述して、実際値がnullかを評価する
+		// assertNotNullメソッドは、assertNotNull(実際値)のように記述して、実際値がnull以外かを評価する
+		// failメソッドは、fail()のように記述して、常に検証失敗にする
+		// といったようなメソッドなどがある
+		// これらのメソッドは、もし想定した値でない場合AssertionErrorを発生させる
+		// ちなみにassert ~ とは ~であるはずだという意味の英文
+		// テストコードは一眼でどのようなテストを行なっているかを把握できることが重要なため
+		// 基本的には非推奨である日本語のメソッドの命名も広く実践されている
 	}
 
-	private static void testTransfer() {
-		// テストの内容を記述
-	}
+	@Test void transfer() {
 
-	// 限られた時間の中で作ることができるテストケースの数は有限である
-	// そのため、より多様な可能性を試せるような(広い範囲をカバーできる)テストケースだけを効率よく作っていくことが重要である
-	// テストケースの作り方に迷ったときに便利なのが正常系と異常系というテストケースの分類
-	// 正常系は、正常に動作することを確認するもので
-	// 異常系は、引数がnullの場合やファイルが見つからない場合のように想定される異常な利用時に、エラー処理がなされているかを確認するもの
+	}
 }
